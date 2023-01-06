@@ -118,6 +118,15 @@ variable "secondary_cidr_blocks" {
   default     = []
 }
 
+variable "secondary_cidr_ipv4_ipam" {
+  description = "List of IPAM IPV4 Pool Info to create secondary CIDR blocks"
+  type = list(map(object({
+    ipv4_ipam_pool_id   = string
+    ipv4_netmask_length = string
+  })))
+  default = []
+}
+
 variable "instance_tenancy" {
   description = "A tenancy option for instances launched into the VPC"
   type        = string

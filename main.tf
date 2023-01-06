@@ -51,6 +51,16 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
   cidr_block = element(var.secondary_cidr_blocks, count.index)
 }
 
+resource "aws_vpc_ipv4_cidr_block_association" "ipv4_ipam" {
+  count = local.create_vpc && length(var.secondary_cidr_ipv4_ipam) > 0 ? length(var.secondary_cidr_ipv4_ipam) : 0
+
+  # Do not turn this into `local.vpc_id`
+  vpc_id = aws_vpc.this[0].id
+
+  ipv4_ipam_pool_id   = var.secondary_cidr_ipv4_ipam[count.index].ipv4_ipam_pool_id
+  ipv4_netmask_length = var.secondary_cidr_ipv4_ipam[count.index].ipv4_netmask_length
+}
+
 resource "aws_default_security_group" "this" {
   count = local.create_vpc && var.manage_default_security_group ? 1 : 0
 
